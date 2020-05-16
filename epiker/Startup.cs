@@ -1,4 +1,5 @@
-using Epiker.Data;
+using Infrastructure;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -18,14 +19,13 @@ namespace epiker
             _config = config;
         }
 
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IProductRepository, ProductRepository>();
             services.AddControllers();
             services.AddDbContext<StoreContext>(x => x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
         }
-
 
         //Midleware
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,7 +37,7 @@ namespace epiker
                 app.UseDeveloperExceptionPage();
             }
 
-            //Redirect us to the https address 
+            //Redirect us to the https address
             app.UseHttpsRedirection();
 
             //Get us to the controller
