@@ -1,3 +1,5 @@
+using AutoMapper;
+using Epiker.api.Mapping;
 using Infrastructure;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
@@ -22,9 +24,16 @@ namespace epiker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Register Generics interfaces
+            services.AddScoped(typeof(IGenericRepository<>),(typeof(GenericRepository<>)));
+            
             services.AddScoped<IProductRepository, ProductRepository>();
+            
             services.AddControllers();
+            
             services.AddDbContext<StoreContext>(x => x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
+
+            services.AddAutoMapper(typeof(MappingProfiles));
         }
 
         //Midleware
@@ -42,6 +51,9 @@ namespace epiker
 
             //Get us to the controller
             app.UseRouting();
+
+            //We need this in order to server static content from our api
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 
