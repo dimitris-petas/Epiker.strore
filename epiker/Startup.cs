@@ -1,13 +1,13 @@
 using AutoMapper;
+using Epiker.api.Extensions;
 using Epiker.api.Mapping;
-using Infrastructure;
+using Epiker.api.Middleware;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace epiker
 {
@@ -24,13 +24,14 @@ namespace epiker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //Register Generics interfaces
-            services.AddScoped(typeof(IGenericRepository<>),(typeof(GenericRepository<>)));
-            
-            services.AddScoped<IProductRepository, ProductRepository>();
-            
+            //Enything that has to do with controller must be bellow the AddControllers
             services.AddControllers();
-            
+
+            //We have create a static function that makes some part of the registrations
+            services.AddApplicationServices();
+
+            services.AddSwaggerDocumentation();
+
             services.AddDbContext<StoreContext>(x => x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
 
             services.AddAutoMapper(typeof(MappingProfiles));
@@ -41,10 +42,9 @@ namespace epiker
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             //If we are in the dev mode then we will se a development fliendly exception page
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseMiddleware<ExceptionMiddleware>();
+
+            app.UseStatusCodePagesWithRedirects("/errors/{0}");
 
             //Redirect us to the https address
             app.UseHttpsRedirection();
@@ -56,6 +56,8 @@ namespace epiker
             app.UseStaticFiles();
 
             app.UseAuthorization();
+
+            app.UseSwaggerDocumentation();
 
             app.UseEndpoints(endpoints =>
             {
