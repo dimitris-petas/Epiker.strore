@@ -35,6 +35,14 @@ namespace epiker
             services.AddDbContext<StoreContext>(x => x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
 
             services.AddAutoMapper(typeof(MappingProfiles));
+
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                 {
+                     policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                 });
+            });
         }
 
         //Midleware
@@ -54,6 +62,8 @@ namespace epiker
 
             //We need this in order to server static content from our api
             app.UseStaticFiles();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 

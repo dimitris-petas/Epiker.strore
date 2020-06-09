@@ -18,6 +18,8 @@ namespace Infrastructure
         public Task<T> GetEntityWithSpec(ISpecification<T> spec);
 
         public Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
+
+        public Task<int> CountAsync(ISpecification<T> spec);
     }
 
     public class GenericRepository<T> : IGenericRepository<T>
@@ -28,6 +30,11 @@ namespace Infrastructure
         public GenericRepository(StoreContext context)
         {
             _context = context;
+        }
+
+        public async Task<int> CountAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).CountAsync();
         }
 
         public async Task<T> GetByIdAsync(int id)
