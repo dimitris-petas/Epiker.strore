@@ -1,5 +1,6 @@
 ﻿using Epiker.api.Errors;
 using Infrastructure;
+using Infrastructure.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace Epiker.api.Extensions
         {
             //Register Generics interfaces
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+
+            services.AddScoped<IBasketRepository,BasketRepository>();
 
             services.AddScoped<IProductRepository, ProductRepository>();
 
