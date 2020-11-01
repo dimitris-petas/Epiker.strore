@@ -3,6 +3,7 @@ using Epiker.api.Extensions;
 using Epiker.api.Mapping;
 using Epiker.api.Middleware;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -32,9 +33,17 @@ namespace epiker
             //We have create a static function that makes some part of the registrations
             services.AddApplicationServices();
 
+            services.AddIdentityServices(_config);
+
             services.AddSwaggerDocumentation();
 
             services.AddDbContext<StoreContext>(x => x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
+
+
+            services.AddDbContext<AppIdentityDbContext>(x =>
+            {
+                x.UseSqlite(_config.GetConnectionString("IdentityConnection"));
+            });
 
             services.AddSingleton<IConnectionMultiplexer>(c =>
             {
@@ -73,6 +82,7 @@ namespace epiker
 
             app.UseCors("CorsPolicy");
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseSwaggerDocumentation();

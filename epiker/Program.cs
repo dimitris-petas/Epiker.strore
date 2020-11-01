@@ -1,5 +1,8 @@
+using Core.Entities;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,6 +31,15 @@ namespace epiker
                     await context.Database.MigrateAsync();
 
                     await StoreContextSeed.SeedAsync(context, loggerFactory);
+
+                    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+
+                    var identity = services.GetRequiredService<AppIdentityDbContext>();
+
+                    await identity.Database.MigrateAsync();
+
+                    await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
+
                 }
                 catch (Exception ex)
                 {
