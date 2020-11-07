@@ -1,7 +1,11 @@
 using AutoMapper;
+using Epiker.api.Dto;
 using Epiker.api.Extensions;
 using Epiker.api.Mapping;
 using Epiker.api.Middleware;
+using Epiker.api.Validation;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
@@ -9,7 +13,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
 namespace epiker
@@ -39,7 +42,6 @@ namespace epiker
 
             services.AddDbContext<StoreContext>(x => x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
 
-
             services.AddDbContext<AppIdentityDbContext>(x =>
             {
                 x.UseSqlite(_config.GetConnectionString("IdentityConnection"));
@@ -50,6 +52,18 @@ namespace epiker
                 var coonfiguration = ConfigurationOptions.Parse(_config.GetConnectionString("Redis"), true);
                 return ConnectionMultiplexer.Connect(coonfiguration);
             });
+
+            services.AddMvc(setup =>
+            {
+            }).AddFluentValidation(fv =>
+            {
+                fv.ImplicitlyValidateChildProperties = true;
+            });
+
+            services.AddTransient<IValidator<UserDto>, UserValidator>();
+            services.AddTransient<IValidator<RegisterDto>, RegisterValidator>();
+            services.AddTransient<IValidator<AddressDto>, AddressValidator>();
+            services.AddTransient<IValidator<BasketItemDto>, BasketItemValidator>();
 
             services.AddAutoMapper(typeof(MappingProfiles));
 
@@ -85,7 +99,7 @@ namespace epiker
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseSwaggerDocumentation();
+            app.UseSwaggerDocumention();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,20 +1,24 @@
-﻿using Core.Entities;
+﻿using AutoMapper;
+using Core.Entities;
+using Epiker.api.Dto;
 using Infrastructure.Repository;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Epiker.api.Controllers
 {
-    public class BasketController:BaseApiController
+    public class BasketController : BaseApiController
     {
         private readonly IBasketRepository _basketRepository;
+        private readonly IMapper _mapper;
 
-        public BasketController(IBasketRepository basketRepository)
+        public BasketController(
+            IBasketRepository basketRepository,
+            IMapper mapper
+            )
         {
             _basketRepository = basketRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -26,9 +30,10 @@ namespace Epiker.api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasket basket)
+        public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasketDto basket)
         {
-            var updatedBasket = await _basketRepository.UpdateBasketsAsync(basket);
+            var customerBasket = _mapper.Map<CustomerBasketDto, CustomerBasket>(basket);
+            var updatedBasket = await _basketRepository.UpdateBasketsAsync(customerBasket);
 
             return Ok(updatedBasket);
         }

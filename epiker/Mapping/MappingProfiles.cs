@@ -17,6 +17,12 @@ namespace Epiker.api.Mapping
             CreateMap<AddressDto, Address>()
                 .ReverseMap();
 
+            CreateMap<CustomerBasketDto, CustomerBasket>()
+                .ReverseMap();
+
+            CreateMap<BasketItemDto, BasketItem>()
+                .ReverseMap();
+
         }
     }
 }

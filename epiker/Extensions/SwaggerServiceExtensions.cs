@@ -4,25 +4,43 @@ using Microsoft.OpenApi.Models;
 
 namespace Epiker.api.Extensions
 {
+    //https://localhost:5001/swagger/index.html
     public static class SwaggerServiceExtensions
     {
         public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Epiker Api", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Epiker API", Version = "v1" });
+
+                var securitySchema = new OpenApiSecurityScheme
+                {
+                    Description = "JWT Auth Bearer Scheme",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                };
+
+                c.AddSecurityDefinition("Bearer", securitySchema);
+                var securityRequirement = new OpenApiSecurityRequirement { { securitySchema, new[] { "Bearer" } } };
+                c.AddSecurityRequirement(securityRequirement);
             });
 
             return services;
         }
 
-        public static IApplicationBuilder UseSwaggerDocumentation(this IApplicationBuilder app)
+        public static IApplicationBuilder UseSwaggerDocumention(this IApplicationBuilder app)
         {
             app.UseSwagger();
-
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Epiker API v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "SkiNet API v1");
             });
 
             return app;
