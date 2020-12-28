@@ -29,7 +29,7 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("PictureUrl")
+                    b.Property<string>("Picture")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Price")

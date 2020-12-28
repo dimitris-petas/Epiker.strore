@@ -12,7 +12,7 @@ namespace Epiker.api.Dto
 
         public string Description { get; set; }
 
-        public string PictureUrl { get; set; }
+        public string Picture { get; set; }
 
         public decimal Price { get; set; }
 

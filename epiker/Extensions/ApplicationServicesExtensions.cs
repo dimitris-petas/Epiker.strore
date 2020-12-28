@@ -1,5 +1,6 @@
 ﻿using Epiker.api.Errors;
 using Infrastructure;
+using Infrastructure.Data;
 using Infrastructure.Repository;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,10 @@ namespace Epiker.api.Extensions
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
 
             services.AddScoped<IBasketRepository, BasketRepository>();
+
+            services.AddScoped<IOrderService, OrderService>();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<ITokenService, TokenService>();
 

@@ -10,7 +10,7 @@ namespace Infrastructure.Repository
 {
     public interface IBasketRepository
     {
-        Task<CustomerBasket> GetBasketsAsync(string basketId);
+        Task<CustomerBasket> GetBasketAsync(string basketId);
         
         Task<CustomerBasket> UpdateBasketsAsync(CustomerBasket basket);
         
@@ -30,7 +30,7 @@ namespace Infrastructure.Repository
             return await _database.KeyDeleteAsync(basketId);
         }
 
-        public async Task<CustomerBasket> GetBasketsAsync(string basketId)
+        public async Task<CustomerBasket> GetBasketAsync(string basketId)
         {
             var data = await _database.StringGetAsync(basketId);
 
@@ -43,7 +43,7 @@ namespace Infrastructure.Repository
 
             if (!created) return null;
 
-            return await GetBasketsAsync(basket.Id);
+            return await GetBasketAsync(basket.Id);
         }
     }
 }

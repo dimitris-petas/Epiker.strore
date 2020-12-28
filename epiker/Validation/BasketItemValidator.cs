@@ -9,9 +9,9 @@ namespace Epiker.api.Validation
         {
             RuleFor(x => x.Id).NotEmpty();
             RuleFor(x => x.ProductName).NotEmpty();
-            RuleFor(x => x.Price).GreaterThan(0.1m).NotEmpty();
-            RuleFor(x => x.Quantity).GreaterThan(1).NotEmpty();
-            RuleFor(x => x.PictureUrl).NotEmpty();
+            RuleFor(x => x.Price).GreaterThan(0.000001m).NotEmpty();
+            RuleFor(x => x.Quantity).GreaterThanOrEqualTo(1).NotEmpty();
+            RuleFor(x => x.Picture).NotEmpty();
             RuleFor(x => x.Brand).NotEmpty();
             RuleFor(x => x.Type).NotEmpty();
         }

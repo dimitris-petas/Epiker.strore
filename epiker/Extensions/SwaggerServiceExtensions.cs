@@ -40,7 +40,7 @@ namespace Epiker.api.Extensions
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "SkiNet API v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Epiker API v1");
             });
 
             return app;

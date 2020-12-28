@@ -40,7 +40,7 @@ namespace Infrastructure.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    PictureUrl = table.Column<string>(nullable: true),
+                    Picture = table.Column<string>(nullable: true),
                     Price = table.Column<decimal>(nullable: false),
                     ProductTypeId = table.Column<int>(nullable: false),
                     ProductBrandId = table.Column<int>(nullable: false)

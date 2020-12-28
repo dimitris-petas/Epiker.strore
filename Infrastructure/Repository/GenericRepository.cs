@@ -20,6 +20,12 @@ namespace Infrastructure
         public Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
 
         public Task<int> CountAsync(ISpecification<T> spec);
+
+        public void Add(T entity);
+
+        public void Update(T entity);
+
+        public void Delete(T entity);
     }
 
     public class GenericRepository<T> : IGenericRepository<T>
@@ -60,6 +66,22 @@ namespace Infrastructure
         private IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {
             return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
+        }
+
+        public void Add(T entity)
+        {
+            _context.Set<T>().Add(entity);
+        }
+
+        public void Update(T entity)
+        {
+            _context.Set<T>().Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
+        }
+
+        public void Delete(T entity)
+        {
+            _context.Set<T>().Remove(entity);
         }
     }
 }

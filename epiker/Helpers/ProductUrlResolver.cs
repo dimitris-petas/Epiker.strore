@@ -16,9 +16,9 @@ namespace Epiker.api.Helpers
 
         public string Resolve(Product source, ProductDto destination, string destMember, ResolutionContext context)
         {
-            if (!string.IsNullOrEmpty(source.PictureUrl))
+            if (!string.IsNullOrEmpty(source.Picture))
             {
-                return _config["ApiUrl"] + source.PictureUrl;
+                return _config["ApiUrl"] + source.Picture;
             }
 
             return null;

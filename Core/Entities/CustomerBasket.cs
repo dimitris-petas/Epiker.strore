@@ -18,6 +18,6 @@ namespace Core.Entities
 
         public string Id { get; set; }
 
-        public IList<BasketItem> BasketItems { get; set; } = new List<BasketItem>();
+        public IList<BasketItem> Items { get; set; } = new List<BasketItem>();
     }
 }
