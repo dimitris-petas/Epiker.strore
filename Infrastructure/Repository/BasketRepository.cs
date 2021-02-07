@@ -12,7 +12,7 @@ namespace Infrastructure.Repository
     {
         Task<CustomerBasket> GetBasketAsync(string basketId);
         
-        Task<CustomerBasket> UpdateBasketsAsync(CustomerBasket basket);
+        Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket);
         
         Task<bool> DeleteBasketsAsync(string basketId);
     }
@@ -37,7 +37,7 @@ namespace Infrastructure.Repository
             return data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<CustomerBasket>(data);
         }
 
-        public async Task<CustomerBasket> UpdateBasketsAsync(CustomerBasket basket)
+        public async Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket)
         {
             var created = await _database.StringSetAsync(basket.Id, JsonSerializer.Serialize(basket) ,TimeSpan.FromDays(30));
 

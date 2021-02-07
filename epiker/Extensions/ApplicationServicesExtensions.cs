@@ -20,6 +20,8 @@ namespace Epiker.api.Extensions
 
             services.AddScoped<IOrderService, OrderService>();
 
+            services.AddScoped<IPaymentService, PaymentService>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<ITokenService, TokenService>();
